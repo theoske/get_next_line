@@ -6,7 +6,7 @@
 /*   By: tkempf-e <tkempf-e@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 17:02:28 by tkempf-e          #+#    #+#             */
-/*   Updated: 2022/03/18 15:37:45 by tkempf-e         ###   ########.fr       */
+/*   Updated: 2022/03/18 16:13:44 by tkempf-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,43 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (join);
 }
 
+char	*ft_line(char *str, int nbrline)
+{
+	int static	i;
+	char		*line;
+	int			j;
+
+	j = 0;
+	i = 0;
+	while (str[i] && nbrline > 0) //met curseur sur ligne a prendre
+	{
+		if (str[i] == '\n')
+			nbrline--;
+		i++;
+	}
+	while (str[i + j] && str[i + j] != '\n')
+		j++;
+	line = malloc(sizeof(char) * (j + 1));
+	j = 0;
+	while (str[i + j] != '\n' && str[i + j])
+	{
+		line[j] = str[i + j];
+		j++;
+	}
+	line[j] = 0;
+	printf("%s", line);//
+	return (line);
+}
+
 char	*get_next_line(int fd)
 {
 	char		buffer[BUFFER_SIZE];
 	char		*str;
+	char		*line;
 	int			octet;
+	int static	nbrline;
 
+	nbrline = 0;
 	str = "";
 	octet = read(fd, buffer, BUFFER_SIZE);
 	buffer[octet] = '\0';
@@ -66,7 +97,9 @@ char	*get_next_line(int fd)
 		buffer[octet] = '\0';
 		str = ft_strjoin(str, buffer);
 	}
-	printf("%s", str);
+	// printf("%s", str);
+	line = ft_line(str, nbrline);
+	nbrline++;
 	return (str);
 }
 
