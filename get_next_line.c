@@ -6,7 +6,7 @@
 /*   By: tkempf-e <tkempf-e@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 17:02:28 by tkempf-e          #+#    #+#             */
-/*   Updated: 2022/03/18 16:13:44 by tkempf-e         ###   ########.fr       */
+/*   Updated: 2022/03/18 16:52:45 by tkempf-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,18 +52,19 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 char	*ft_line(char *str, int nbrline)
 {
-	int static	i;
+	int static	i = 0;
 	char		*line;
 	int			j;
 
 	j = 0;
-	i = 0;
+	// printf("%s", str);
 	while (str[i] && nbrline > 0) //met curseur sur ligne a prendre
 	{
 		if (str[i] == '\n')
 			nbrline--;
 		i++;
 	}
+	// printf("%d", i);//
 	while (str[i + j] && str[i + j] != '\n')
 		j++;
 	line = malloc(sizeof(char) * (j + 1));
@@ -73,34 +74,41 @@ char	*ft_line(char *str, int nbrline)
 		line[j] = str[i + j];
 		j++;
 	}
+	if (str[i + j] == '\n')
+	{
+		line[j] = '\n';
+		j++;
+	}
 	line[j] = 0;
 	printf("%s", line);//
+	printf("s");
 	return (line);
 }
 
 char	*get_next_line(int fd)
 {
-	char		buffer[BUFFER_SIZE];
+	char		buffer[35];
 	char		*str;
 	char		*line;
 	int			octet;
-	int static	nbrline;
+	int static	nbrline = 0;
 
-	nbrline = 0;
 	str = "";
-	octet = read(fd, buffer, BUFFER_SIZE);
+	octet = read(fd, buffer, 35);
 	buffer[octet] = '\0';
 	str = ft_strjoin(str, buffer);
 	while (octet != 0)
 	{
-		octet = read(fd, buffer, BUFFER_SIZE);
+		octet = read(fd, buffer, 35);
 		buffer[octet] = '\0';
 		str = ft_strjoin(str, buffer);
 	}
-	// printf("%s", str);
+	// printf("%s", str);//
 	line = ft_line(str, nbrline);
+	// printf("%d", nbrline);//
 	nbrline++;
-	return (str);
+	// printf("%s", line);//
+	return (line);
 }
 
 int main()
@@ -108,6 +116,10 @@ int main()
 	int fd = open("jambon.txt", O_RDONLY);
 
 	get_next_line(fd);
+	get_next_line(fd);
+	// printf("%s", get_next_line(fd));
+	// printf("%s", get_next_line(fd));
+
 	// printf("%s",get_next_line(fd));
 	return (0);
 }
