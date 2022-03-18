@@ -6,7 +6,7 @@
 /*   By: tkempf-e <tkempf-e@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 17:02:28 by tkempf-e          #+#    #+#             */
-/*   Updated: 2022/03/17 17:35:47 by tkempf-e         ###   ########.fr       */
+/*   Updated: 2022/03/18 15:37:45 by tkempf-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,47 +15,66 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-char	*get_next_line(int fd)
+size_t	ft_strlen(const char *s)
 {
-	static int	i;
-	int			j;
-	char		buffer[BUFFER_SIZE];
-	char		*str;
-	char		*stocker;
+	size_t	i;
 
-	//buffer de 1 prend cara par cara pour afficher toute la ligne
-	//buffer de 1000 prend tout le txt pour afficher que la 1ere ligne
-	//affiche ligne 2 en cas de rappelle
-	//lire et sauvegarder en meme temps
-	read(fd, buffer, BUFFER_SIZE);
-	str = malloc(sizeof(char) * BUFFER_SIZE);
-	stocker = malloc(sizeof(char) * BUFFER_SIZE);
-	while (buffer[i] != '\n' && i < BUFFER_SIZE)
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	char	*join;
+	int		i;
+	int		j;
+
+	j = 0;
+	i = 0;
+	join = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)));
+	if (!join)
+		return (NULL);
+	while (s1[i])
 	{
-		str[i] = buffer[i];
+		join[i] = *(char *)(s1 + i);
 		i++;
 	}
-	str[i + 1] = 0;
-	j = 0;
-	if (buffer[i] == '\n')
+	while (s2[j])
 	{
-		str[i] = buffer[i];
-		while (buffer[i + j])
-		{
-			stocker[j] = buffer[i + j];//met reste buffer dans stocker
-			j++;
-		}
+		join[i + j] = *(char *)(s2 + j);
+		j++;
 	}
-	printf("\n\nstocker : %s\n\n", stocker);
+	join[i + j] = '\0';
+	return (join);
+}
+
+char	*get_next_line(int fd)
+{
+	char		buffer[BUFFER_SIZE];
+	char		*str;
+	int			octet;
+
+	str = "";
+	octet = read(fd, buffer, BUFFER_SIZE);
+	buffer[octet] = '\0';
+	str = ft_strjoin(str, buffer);
+	while (octet != 0)
+	{
+		octet = read(fd, buffer, BUFFER_SIZE);
+		buffer[octet] = '\0';
+		str = ft_strjoin(str, buffer);
+	}
+	printf("%s", str);
 	return (str);
 }
 
 int main()
 {	
 	int fd = open("jambon.txt", O_RDONLY);
-	printf("%s",get_next_line(fd));
+
+	get_next_line(fd);
 	// printf("%s",get_next_line(fd));
-
-
 	return (0);
 }
