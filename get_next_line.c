@@ -6,7 +6,7 @@
 /*   By: tkempf-e <tkempf-e@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 17:02:28 by tkempf-e          #+#    #+#             */
-/*   Updated: 2022/03/21 16:33:52 by tkempf-e         ###   ########.fr       */
+/*   Updated: 2022/03/21 17:23:28 by tkempf-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,15 +101,16 @@ char	*get_next_line(int fd)
 	line = ft_line(str);
 	return (line);
 }
+//free tout ce qui peut etre free
+int main()
+{	
+	int fd = open("jambon.txt", O_RDONLY);
 
-// int main()
-// {	
-// 	int fd = open("jambon.txt", O_RDONLY);
-
-// 	// get_next_line(fd);
-// 	// get_next_line(fd);
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	printf("%s", get_next_line(fd));
-// 	return (0);
-// }
+	// get_next_line(fd);
+	// get_next_line(fd);
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	printf("%s", get_next_line(fd));
+	// printf("%s", get_next_line(fd));	
+	return (0);
+}
