@@ -6,7 +6,7 @@
 /*   By: tkempf-e <tkempf-e@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 17:02:28 by tkempf-e          #+#    #+#             */
-/*   Updated: 2022/03/18 17:44:38 by tkempf-e         ###   ########.fr       */
+/*   Updated: 2022/03/21 16:33:52 by tkempf-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 size_t	ft_strlen(const char *s)
 {
-	size_t	i;
+	int		i;
 
 	i = 0;
 	while (s[i])
@@ -25,7 +25,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*join;
 	int		i;
@@ -57,20 +57,8 @@ char	*ft_line(char *str)
 	int			j;
 
 	j = 0;
-	// printf("%s", str);//
-	// printf("%d", nbrline);
-
-	// while (str[i] && nbrline > 0) //met curseur sur ligne a prendre
-	// {
-	// 	if (str[i] == '\n')
-	// 		nbrline--;
-	// 	i++;
-	// }
-
-	// printf("%d", i);//
 	while (str[i + j] && str[i + j] != '\n')
 		j++;
-	// printf("%d\n", j);//
 	line = malloc(sizeof(char) * (j + 1));
 	j = 0;
 	while (str[i] != '\n' && str[i])
@@ -79,54 +67,49 @@ char	*ft_line(char *str)
 		j++;
 		i++;
 	}
-	printf("%c", str[i]);//
-	if (str[i] == '\n')
+	while (str[i] == '\n')
 	{
 		line[j] = '\n';
 		j++;
 		i++;
 	}
 	line[j] = 0;
-	// printf("%s", line);//
-	// printf("s");
 	return (line);
 }
 
 char	*get_next_line(int fd)
 {
 	char		buffer[BUFFER_SIZE];
-	char		*str;
+	static char	*str;
 	char		*line;
-	int			octet;
-	// int static	nbrline = 0;
+	int static	octet = -2;
 
-	str = "";
-	octet = read(fd, buffer, BUFFER_SIZE);
-	buffer[octet] = '\0';
-	str = ft_strjoin(str, buffer);
+	if (!str)
+	{
+		str = malloc(sizeof(char));
+		str = "";
+	}
 	while (octet != 0)
 	{
 		octet = read(fd, buffer, BUFFER_SIZE);
-		buffer[octet] = '\0';
-		str = ft_strjoin(str, buffer);
+		if (octet != 0)
+		{
+			buffer[octet] = '\0';
+			str = ft_strjoin(str, buffer);
+		}
 	}
-	// printf("%s", str);//
 	line = ft_line(str);
-	// printf("a");
-	// printf("%d", nbrline);//
-	// nbrline++;
-	// printf("%s", line);//
 	return (line);
 }
 
-int main()
-{	
-	int fd = open("jambon.txt", O_RDONLY);
+// int main()
+// {	
+// 	int fd = open("jambon.txt", O_RDONLY);
 
-	// get_next_line(fd);
-	// get_next_line(fd);
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	// printf("%s",get_next_line(fd));
-	return (0);
-}
+// 	// get_next_line(fd);
+// 	// get_next_line(fd);
+// 	printf("%s", get_next_line(fd));
+// 	printf("%s", get_next_line(fd));
+// 	printf("%s", get_next_line(fd));
+// 	return (0);
+// }
