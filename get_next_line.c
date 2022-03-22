@@ -6,7 +6,7 @@
 /*   By: tkempf-e <tkempf-e@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 17:02:28 by tkempf-e          #+#    #+#             */
-/*   Updated: 2022/03/21 17:23:28 by tkempf-e         ###   ########.fr       */
+/*   Updated: 2022/03/22 13:31:08 by tkempf-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,10 @@ char	*ft_strjoin(char *s1, char *s2)
 	i = 0;
 	join = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2)));
 	if (!join)
+	{
+		free(join);
 		return (NULL);
+	}
 	while (s1[i])
 	{
 		join[i] = *(char *)(s1 + i);
@@ -79,11 +82,13 @@ char	*ft_line(char *str)
 
 char	*get_next_line(int fd)
 {
-	char		buffer[BUFFER_SIZE];
+	char		buffer[25];
 	static char	*str;
 	char		*line;
 	int static	octet = -2;
 
+	if (BUFFER_SIZE == 0)
+		return (NULL);
 	if (!str)
 	{
 		str = malloc(sizeof(char));
@@ -91,26 +96,28 @@ char	*get_next_line(int fd)
 	}
 	while (octet != 0)
 	{
-		octet = read(fd, buffer, BUFFER_SIZE);
+		octet = read(fd, buffer, 25);
 		if (octet != 0)
 		{
 			buffer[octet] = '\0';
 			str = ft_strjoin(str, buffer);
 		}
 	}
+	// proteger en cas de buffer vide
+	// if (octet == 0)
+	// 	return (0);
 	line = ft_line(str);
 	return (line);
 }
-//free tout ce qui peut etre free
-int main()
-{	
-	int fd = open("jambon.txt", O_RDONLY);
-
-	// get_next_line(fd);
-	// get_next_line(fd);
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	printf("%s", get_next_line(fd));
-	// printf("%s", get_next_line(fd));	
-	return (0);
-}
+// free tout ce qui peut etre free
+// int main()
+// {	
+// 	int fd = open("jambon.txt", O_RDONLY);
+// 	// get_next_line(fd);
+// 	// get_next_line(fd);
+// 	printf("%s", get_next_line(fd));
+// 	printf("%s", get_next_line(fd));
+// 	printf("%s", get_next_line(fd));
+// 	// printf("%s", get_next_line(fd));	
+// 	return (0);
+// }
