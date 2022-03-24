@@ -6,7 +6,7 @@
 /*   By: tkempf-e <tkempf-e@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 17:02:28 by tkempf-e          #+#    #+#             */
-/*   Updated: 2022/03/23 17:18:47 by tkempf-e         ###   ########.fr       */
+/*   Updated: 2022/03/24 14:13:29 by tkempf-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <string.h>
 
 size_t	ft_strlen(const char *s)
 {
@@ -46,11 +45,10 @@ char	*ft_strjoin(char *s1, char *s2)
 	}
 	while (s2[j])
 	{
-		join[i] = *(char *)(s2 + j);
+		join[i + j] = *(char *)(s2 + j);
 		j++;
-		i++;
 	}
-	join[i] = '\0';
+	join[i + j] = '\0';
 	free(s1);
 	return (join);
 }
@@ -70,9 +68,11 @@ char	*get_next_line(int fd)
 {
 	char		buffer[2];
 	char		*line;
-	int static	octet = 0;
+	int			octet;
+	int static	stat = BUFFER_SIZE;
 
 	line = NULL;
+	octet = 0;
 	if (octet == 0)
 	{
 		octet = read(fd, buffer, 1);
@@ -86,20 +86,6 @@ char	*get_next_line(int fd)
 		free(line);
 		return (NULL);
 	}
+	stat--;
 	return (line);
 }
-// free tout ce qui peut etre free
-// int main()
-// {	
-// 	int fd = open("jambon.txt", O_RDONLY);
-// 	// get_next_line(fd);
-// 	// get_next_line(fd);
-// 	// get_next_line(fd);
-// 	get_next_line(fd);
-// 	printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	// printf("%s", get_next_line(fd));
-// 	return (0);
-// }
