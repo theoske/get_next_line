@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tkempf-e <tkempf-e@student.42mulhouse.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/15 17:02:28 by tkempf-e          #+#    #+#             */
-/*   Updated: 2022/03/24 15:26:45 by tkempf-e         ###   ########.fr       */
+/*   Created: 2022/03/24 14:17:29 by tkempf-e          #+#    #+#             */
+/*   Updated: 2022/03/24 15:02:31 by tkempf-e         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_line(char *line, char *buffer, int octet, int fd)
 {
